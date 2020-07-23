@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: mod-share
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 50MB
+  datasource:
+    sql-script-encoding: UTF-8
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:psc
+    username: sa
+    password:
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+        temp:
+          use_jdbc_metadata_defaults: false
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+---
+
+spring:
+  profiles: local
+  datasource:
+    platform: postgres
+    url: jdbc:postgresql://localhost:5432/mode-share
+    username: mode-share
+    password: 123
+    driverClassName: org.postgresql.Driver
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: update
