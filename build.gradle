@@ -32,6 +32,15 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 }
 
+bootRun {
+	systemProperty 'spring.profiles.active', System.properties['spring.profiles.active']
+}
+
 test {
+	systemProperty 'spring.profiles.active', System.properties['spring.profiles.active']
+	systemProperty 'file.encoding', 'UTF8'
+	testLogging {
+		events "PASSED", "STARTED", "FAILED", "SKIPPED"
+	}
 	useJUnitPlatform()
 }
