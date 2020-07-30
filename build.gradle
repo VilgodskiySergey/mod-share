@@ -1,7 +1,7 @@
 plugins {
-	id 'org.springframework.boot' version '2.3.1.RELEASE'
-	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
-	id 'java'
+    id 'org.springframework.boot' version '2.3.1.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id 'java'
 }
 
 group = 'com.vilgodskiy'
@@ -9,38 +9,64 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
+    maven { url 'https://nexus.element-soft.com/repository/maven-public/' }
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'com.h2database:h2'
-	runtimeOnly 'org.postgresql:postgresql'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation('org.springframework.boot:spring-boot-starter-test') {
-		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-	}
-	testImplementation 'org.springframework.security:spring-security-test'
+
+    //SPRING
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    //DATA BASES
+    runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'org.postgresql:postgresql'
+
+    //LOMBOK
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    //VALIDATOR
+    implementation 'com.elementsoft.common:validator:0.2.0-SNAPSHOT'
+
+    //APACHE COMMON
+    implementation 'org.apache.commons:commons-lang3:3.11'
+    implementation 'org.apache.commons:commons-collections4:4.4'
+
+    //SWAGGER
+    implementation 'io.springfox:springfox-swagger2:2.9.2'
+    implementation 'io.springfox:springfox-swagger-ui:2.9.2'
+    implementation 'io.swagger:swagger-annotations:1.5.24'
+    implementation 'io.swagger:swagger-models:1.5.24'
+
+    //JWT AUTH
+    implementation 'com.auth0:java-jwt:3.8.1'
+    implementation 'com.auth0:auth0-spring-security-api:1.2.3'
+
+    //TEST
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+    testImplementation 'org.springframework.security:spring-security-test'
 }
 
 bootRun {
-	systemProperty 'spring.profiles.active', System.properties['spring.profiles.active']
+    systemProperty 'spring.profiles.active', System.properties['spring.profiles.active']
 }
 
 test {
-	systemProperty 'spring.profiles.active', System.properties['spring.profiles.active']
-	systemProperty 'file.encoding', 'UTF8'
-	testLogging {
-		events "PASSED", "STARTED", "FAILED", "SKIPPED"
-	}
-	useJUnitPlatform()
+    systemProperty 'spring.profiles.active', System.properties['spring.profiles.active']
+    systemProperty 'file.encoding', 'UTF8'
+    testLogging {
+        events "PASSED", "STARTED", "FAILED", "SKIPPED"
+    }
+    useJUnitPlatform()
 }
