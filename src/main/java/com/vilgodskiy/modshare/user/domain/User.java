@@ -8,6 +8,7 @@ import com.vilgodskiy.modshare.util.TracingInfo;
 import com.vilgodskiy.modshare.util.Validable;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -32,11 +33,11 @@ public class User implements Validable<User>, Savable<User> {
     public static final int MIDDLE_NAME_LENGTH = 32;
     public static final int EMAIL_LENGTH = 254;
     public static final int PHONE_MAX_LENGTH = 16;
-    public static final int USERNAME_MAX_LENGTH = 32;
+    public static final int LOGIN_MAX_LENGTH = 32;
     public static final int PASSWORD_MIN_LENGTH = 6;
     public static final int PASSWORD_MAX_LENGTH = 32;
 
-    private static final Pattern USERNAME_PATTERN = Pattern.compile("[a-zA-Z\\d]+");
+    private static final Pattern LOGIN_PATTERN = Pattern.compile("[a-zA-Z\\d]+");
     private static final Pattern EMAIL_PATTERN = Pattern.compile("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)])");
 
     /**
@@ -87,7 +88,7 @@ public class User implements Validable<User>, Savable<User> {
     /**
      * Username (login)
      */
-    @Column(name = "s_login", length = USERNAME_MAX_LENGTH, nullable = false, unique = true)
+    @Column(name = "s_login", length = LOGIN_MAX_LENGTH, nullable = false, unique = true)
     private String login;
 
     /**
@@ -114,13 +115,13 @@ public class User implements Validable<User>, Savable<User> {
         this.firstName = firstName;
         this.lastName = lastName;
         this.middleName = middleName;
-        this.email = email;
+        this.email = StringUtils.toRootLowerCase(email);
         this.phone = phone;
         this.login = login;
         this.passwordHash = passwordHash;
         this.role = role;
         this.tracingInfo = new TracingInfo(executor);
-        Validators.USERNAME
+        Validators.LOGIN
                 .then(Validators.NAMES)
                 .then(Validators.EMAIL)
                 .then(Validators.ROLE)
@@ -129,20 +130,33 @@ public class User implements Validable<User>, Savable<User> {
                 .throwIfHasErrors();
     }
 
+    public User update(String firstName, String lastName, String middleName, String phone, User executor) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.middleName = middleName;
+        this.phone = phone;
+        this.tracingInfo.modified(executor);
+        Validators.NAMES
+                .then(Validators.PHONE)
+                .validate(this)
+                .throwIfHasErrors();
+        return this;
+    }
+
     public enum Validators implements Validator<User> {
         EMAIL {
             @Override
             public ValidationResult validate(User user) {
                 return ValidationUtils.validateEmptyAndMaxSize(user.getEmail(), User.EMAIL_LENGTH, "Email")
-                        .addResult(ValidationUtils.validatePattern(user.getEmail(), EMAIL_PATTERN, "Некоректный Email"));
+                        .addResult(ValidationUtils.validatePattern(user.getEmail(), EMAIL_PATTERN, INCORRECT_EMAIL));
             }
         },
-        USERNAME {
+        LOGIN {
             @Override
             public ValidationResult validate(User user) {
                 return ValidationUtils
-                        .validateEmptyAndMaxSize(user.getLogin(),
-                                User.USERNAME_MAX_LENGTH, "Логин");
+                        .validateEmptyAndMaxSize(user.getLogin(), User.LOGIN_MAX_LENGTH, "Логин")
+                        .addResult(ValidationUtils.validatePattern(user.getLogin(), LOGIN_PATTERN, INCORRECT_LOGIN));
             }
         },
         ROLE {
@@ -166,6 +180,9 @@ public class User implements Validable<User>, Savable<User> {
             public ValidationResult validate(User user) {
                 return ValidationUtils.validateMaxSize(user.getPhone(), PHONE_MAX_LENGTH, "Телефон");
             }
-        }
+        };
+
+        public static final String INCORRECT_EMAIL = "Некоректный Email";
+        public static final String INCORRECT_LOGIN = "Некоректный логин";
     }
 }
