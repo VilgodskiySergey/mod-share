@@ -50,8 +50,8 @@ public class SwaggerLoginOperationsConfig extends ApiListingScanner {
 
         loginOperation.add(
                 new OperationBuilder(new CachingOperationNameGenerator())
-                        .tags(Collections.singleton("auth-api"))
-                        .consumes(Collections.singleton(MediaType.APPLICATION_JSON_VALUE))
+                        .tags(Collections.singleton("Авторизация"))
+                        .consumes(Collections.singleton(MediaType.APPLICATION_JSON_UTF8_VALUE))
                         .method(HttpMethod.POST)
                         .uniqueId("login")
                         .parameters(
@@ -75,10 +75,10 @@ public class SwaggerLoginOperationsConfig extends ApiListingScanner {
         apis.add(new ApiDescription(null, "/login", "Authentication documentation", loginOperation, false));
 
         Map<String, ModelProperty> properties = new HashMap<>();
-        properties.put("username", new ModelProperty(
-                "username", typeResolver.resolve(String.class), "java.lang.String",
+        properties.put("login", new ModelProperty(
+                "login", typeResolver.resolve(String.class), "java.lang.String",
                 0, true, false, true, false,
-                "username", null, "", null, null, null,
+                "login", null, "", null, null, null,
                 Collections.emptyList()).updateModelRef(input -> new ModelRef("string")));
         properties.put("password", new ModelProperty(
                 "password", typeResolver.resolve(String.class), "java.lang.String",
@@ -97,14 +97,14 @@ public class SwaggerLoginOperationsConfig extends ApiListingScanner {
                         "",
                         "",
                         Collections.emptyList(),
-                        new LoginForm("username", "password"),
+                        new LoginForm("admin", "123456"),
                         null)
         );
 
         def.put("authentication", new ApiListingBuilder(context.getDocumentationContext().getApiDescriptionOrdering())
                 .apis(apis)
                 .description("Authentication")
-                .tags(Collections.singleton(new Tag("auth-api", "Api for login")))
+                .tags(Collections.singleton(new Tag("Авторизация", "Api для авторизации")))
                 .models(loginFormModel)
                 .build());
         return def;

@@ -42,7 +42,7 @@ public class AuthExceptionHandlerFilter extends GenericFilterBean {
                         HttpStatus status)
             throws IOException {
         response.setStatus(status.value());
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
         String message =
                 isInteger(exception.getMessage().substring(0, 2))
                         ? exception.getMessage().substring(4)

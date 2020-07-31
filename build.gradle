@@ -29,6 +29,7 @@ dependencies {
     //DATA BASES
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'org.postgresql:postgresql'
+    annotationProcessor ('org.hibernate:hibernate-jpamodelgen:5.4.16.Final')
 
     //LOMBOK
     compileOnly 'org.projectlombok:lombok'

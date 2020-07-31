@@ -12,7 +12,7 @@ import static com.vilgodskiy.modshare.application.config.security.JwtTokenServic
 @Getter
 public class AccountJwtToken extends UsernamePasswordAuthenticationToken {
 
-    private String username;
+    private String login;
 
     private UUID accountId;
 
@@ -24,7 +24,7 @@ public class AccountJwtToken extends UsernamePasswordAuthenticationToken {
         super(jwt.getSubject(), null,
                 AuthorityUtils.createAuthorityList(jwt.getClaim(ROLE_CLAIM).asArray(String.class)));
         this.accountId = UUID.fromString(jwt.getClaim(ID_CLAIM).asString());
-        this.username = jwt.getSubject();
+        this.login = jwt.getSubject();
         this.tokenType = JwtTokenType.valueOf(jwt.getClaim(TOKEN_TYPE_CLAIM).asString());
         this.sessionId = jwt.getClaim(SESSION_ID_CLAIM).asString();
     }
