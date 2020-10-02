@@ -32,7 +32,7 @@ public class UserRestController {
     private final UserService userService;
     private final UserRepository userRepository;
 
-    @GetMapping("/filter")
+    @GetMapping
     @PreAuthorize("hasAuthority('" + Role.ADMINISTRATOR_ROLE + "')")
     @ApiOperation("Атрибутивный поиск в списке объектов")
     public ResponseEntity<Page<UserResponse>> filter(

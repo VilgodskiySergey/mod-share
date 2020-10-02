@@ -36,7 +36,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
 
     //VALIDATOR
-    implementation 'com.elementsoft.common:validator:0.2.0-SNAPSHOT'
+    implementation 'com.elementsoft.common:validator:0.3.0-SNAPSHOT'
 
     //APACHE COMMON
     implementation 'org.apache.commons:commons-lang3:3.11'
