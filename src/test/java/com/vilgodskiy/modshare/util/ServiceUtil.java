@@ -1,5 +1,7 @@
 package com.vilgodskiy.modshare.util;
 
+import com.vilgodskiy.modshare.mod.repository.ModRepository;
+import com.vilgodskiy.modshare.mod.service.ModService;
 import com.vilgodskiy.modshare.user.repository.UserRepository;
 import com.vilgodskiy.modshare.user.service.UserService;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -17,7 +19,9 @@ public class ServiceUtil {
     public final static Random RANDOM = new Random();
 
     public static UserService userService;
+    public static ModService modService;
     public static UserRepository userRepository;
+    public static ModRepository modRepository;
 
     public static String randomString() {
         return randomString(16, true, true);
@@ -43,5 +47,15 @@ public class ServiceUtil {
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
         ServiceUtil.userRepository = userRepository;
+    }
+
+    @Autowired
+    public void setModService(ModService modService) {
+        ServiceUtil.modService = modService;
+    }
+
+    @Autowired
+    public void setModRepository(ModRepository modRepository) {
+        ServiceUtil.modRepository = modRepository;
     }
 }

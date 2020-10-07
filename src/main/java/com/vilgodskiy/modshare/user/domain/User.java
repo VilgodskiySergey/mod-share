@@ -27,6 +27,7 @@ import java.util.regex.Pattern;
 public class User implements Validable<User>, Savable<User> {
 
     public static final String PATH = "user";
+    public static final String ENTITY_NAME = "Профиль";
 
     public static final int FIRST_NAME_LENGTH = 32;
     public static final int LAST_NAME_LENGTH = 32;

@@ -5,7 +5,7 @@ import com.vilgodskiy.modshare.application.exception.NotFoundObjectException;
 import com.vilgodskiy.modshare.user.domain.Role;
 import com.vilgodskiy.modshare.user.domain.User;
 import com.vilgodskiy.modshare.user.domain.User_;
-import com.vilgodskiy.modshare.user.service.UserUniqueStringFieldValidator;
+import com.vilgodskiy.modshare.util.UniqueStringFieldValidator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -82,7 +82,7 @@ public class UserServiceTest {
         createUser(email);
         ValidationException exception = Assertions.assertThrows(ValidationException.class, () -> createUser(email));
         Assertions.assertEquals(1, exception.getErrors().size());
-        Assertions.assertEquals(String.format(UserUniqueStringFieldValidator.IS_DUPLICATE, User_.EMAIL, email),
+        Assertions.assertEquals(String.format(UniqueStringFieldValidator.IS_DUPLICATE, User.ENTITY_NAME, User_.EMAIL, email),
                 exception.getErrors().get(0));
     }
 
@@ -110,7 +110,7 @@ public class UserServiceTest {
         ValidationException exception = Assertions.assertThrows(ValidationException.class,
                 () -> createUser(login, getRandomRole()));
         Assertions.assertEquals(1, exception.getErrors().size());
-        Assertions.assertEquals(String.format(UserUniqueStringFieldValidator.IS_DUPLICATE, "Логин", login),
+        Assertions.assertEquals(String.format(UniqueStringFieldValidator.IS_DUPLICATE, User.ENTITY_NAME, "Логин", login),
                 exception.getErrors().get(0));
     }
 

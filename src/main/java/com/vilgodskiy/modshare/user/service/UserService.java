@@ -4,6 +4,7 @@ import com.vilgodskiy.modshare.user.domain.Role;
 import com.vilgodskiy.modshare.user.domain.User;
 import com.vilgodskiy.modshare.user.domain.User_;
 import com.vilgodskiy.modshare.user.repository.UserRepository;
+import com.vilgodskiy.modshare.util.UniqueStringFieldValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,8 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordValidator passwordValidator;
-    private final UserUniqueStringFieldValidator userUniqueStringFieldValidator;
+    private final UniqueStringFieldValidator uniqueStringFieldValidator =
+            new UniqueStringFieldValidator(User.ENTITY_NAME);
     private final PasswordEncoder passwordEncoder;
 
     /**
@@ -30,9 +32,9 @@ public class UserService {
     public User create(String firstName, String lastName, String middleName, String email, String phone,
                        String login, String password, Role role, User executor) {
         passwordValidator.validate(password).throwIfHasErrors();
-        userUniqueStringFieldValidator.validate(email, User_.EMAIL,
+        uniqueStringFieldValidator.validate(email, User_.EMAIL,
                 () -> userRepository.existsByEmailIgnoreCase(email)).throwIfHasErrors();
-        userUniqueStringFieldValidator.validate(login, "Логин",
+        uniqueStringFieldValidator.validate(login, "Логин",
                 () -> userRepository.existsByLoginIgnoreCase(login)).throwIfHasErrors();
         return new User(firstName, lastName, middleName, email, phone,
                 login, passwordEncoder.encode(password), role, executor)
