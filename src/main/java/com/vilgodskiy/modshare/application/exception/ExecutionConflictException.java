@@ -8,7 +8,7 @@ import lombok.Getter;
 @Getter
 public class ExecutionConflictException extends RuntimeException {
 
-    private ErrorMessage errMsg;
+    private final ErrorMessage errMsg;
 
     public ExecutionConflictException(String msg) {
         super(msg);
