@@ -32,9 +32,16 @@ public class ModServiceTest {
     @Test
     void create() {
         String title = randomString(Mod.TITLE_LENGTH);
+        String googleDriveFileId = randomString();
+        String zipName = randomString(Mod.ZIP_NAME_LENGTH);
+        String editingFilePath = randomString();
         User owner = createUser(randomString(), Role.MOD_DEVELOPER);
-        Mod mod = Assertions.assertDoesNotThrow(() -> modService.create(title, owner));
+        Mod mod = Assertions.assertDoesNotThrow(() ->
+                modService.create(title, googleDriveFileId, zipName, editingFilePath, owner));
         Assertions.assertEquals(title, mod.getTitle());
+        Assertions.assertEquals(googleDriveFileId, mod.getGoogleDriveFileId());
+        Assertions.assertEquals(zipName, mod.getZipName());
+        Assertions.assertEquals(editingFilePath, mod.getEditingFilePath());
         Assertions.assertEquals(owner.getId(), mod.getOwner().getId());
         Assertions.assertNotNull(mod.getId());
         Assertions.assertNotNull(mod.getTracingInfo());
@@ -59,7 +66,6 @@ public class ModServiceTest {
         ValidationException exception = Assertions.assertThrows(ValidationException.class,
                 () -> createMod(randomString(Mod.TITLE_LENGTH), null));
         Assertions.assertEquals(1, exception.getErrors().size());
-        Assertions.assertEquals(Mod.Validators.EMPTY_OWNER, exception.getErrors().get(0));
         User consumer = createUser(randomString(User.LOGIN_MAX_LENGTH), Role.CONSUMER);
         exception = Assertions.assertThrows(ValidationException.class,
                 () -> createMod(randomString(Mod.TITLE_LENGTH), consumer));
@@ -75,9 +81,15 @@ public class ModServiceTest {
     void update() {
         Mod mod = createRandomMod();
         String title = randomString(Mod.TITLE_LENGTH);
-        Mod updatedMod = Assertions.assertDoesNotThrow(() -> modService.update(mod.getId(), title,
-                mod.getOwner()));
+        String googleDriveFileId = randomString();
+        String zipName = randomString(Mod.ZIP_NAME_LENGTH);
+        String editingFilePath = randomString();
+        Mod updatedMod = Assertions.assertDoesNotThrow(() ->
+                modService.update(mod.getId(), title, googleDriveFileId, zipName, editingFilePath, mod.getOwner()));
         Assertions.assertEquals(title, updatedMod.getTitle());
+        Assertions.assertEquals(googleDriveFileId, mod.getGoogleDriveFileId());
+        Assertions.assertEquals(zipName, mod.getZipName());
+        Assertions.assertEquals(editingFilePath, mod.getEditingFilePath());
     }
 
     @Test
@@ -96,7 +108,7 @@ public class ModServiceTest {
     }
 
     public static Mod createMod(String title, User owner) {
-        return modService.create(title, owner);
+        return modService.create(title, randomString(), randomString(Mod.ZIP_NAME_LENGTH), randomString(), owner);
     }
 
 }

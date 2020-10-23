@@ -52,6 +52,11 @@ dependencies {
     implementation 'com.auth0:java-jwt:3.8.1'
     implementation 'com.auth0:auth0-spring-security-api:1.2.3'
 
+    //GOOGLE DRIVE
+    implementation 'com.google.api-client:google-api-client:1.23.0'
+    implementation 'com.google.oauth-client:google-oauth-client-jetty:1.23.0'
+    implementation 'com.google.apis:google-api-services-drive:v3-rev110-1.23.0'
+
     //TEST
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'

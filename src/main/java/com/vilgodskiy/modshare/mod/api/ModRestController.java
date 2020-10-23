@@ -10,13 +10,17 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.InputStream;
 import java.util.UUID;
 
 /**
@@ -56,7 +60,8 @@ public class ModRestController {
     public ResponseEntity<ModResponse> create(
             @ApiParam("Новый объект") @RequestBody ModCreateRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(modAssembler.assemble(
-                modService.create(request.getTitle(), ActiveUserHolder.getActiveUser())));
+                modService.create(request.getTitle(), request.getGoogleDriveFileId(), request.getZipName(),
+                        request.getEditingFilePath(), ActiveUserHolder.getActiveUser())));
     }
 
     @PutMapping("/{id}")
@@ -67,7 +72,8 @@ public class ModRestController {
             @ApiParam("Обновлённый объект") @RequestBody ModUpdateRequest request) {
         modModifyAccessChecker.checkAccessOrThrow(ActiveUserHolder.getActiveUser(), id);
         return ResponseEntity.ok(modAssembler.assemble(
-                modService.update(id, request.getTitle(), ActiveUserHolder.getActiveUser())));
+                modService.update(id, request.getTitle(), request.getGoogleDriveFileId(), request.getZipName(),
+                        request.getEditingFilePath(), ActiveUserHolder.getActiveUser())));
     }
 
     @DeleteMapping("/{id}")
@@ -77,6 +83,19 @@ public class ModRestController {
         modModifyAccessChecker.checkAccessOrThrow(ActiveUserHolder.getActiveUser(), id);
         modService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}/download")
+    @PreAuthorize("hasAnyAuthority('" + Role.MOD_DEVELOPER_ROLE + ", " + Role.ADMINISTRATOR_ROLE + ", " + Role.CONSUMER_ROLE + "')")
+    @ApiOperation("Скачать мод")
+    public ResponseEntity<InputStreamResource> download(@ApiParam("Идентификатор мода") @PathVariable UUID id) {
+        modModifyAccessChecker.checkAccessOrThrow(ActiveUserHolder.getActiveUser(), id);
+        InputStream inputStream = modService.downloadMod(id);
+        return ResponseEntity.ok()
+                .contentType(new MediaType("application", "zip"))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="
+                        + modRepository.getOrThrow(id).getZipName())
+                .body(new InputStreamResource(inputStream));
     }
 
 }
