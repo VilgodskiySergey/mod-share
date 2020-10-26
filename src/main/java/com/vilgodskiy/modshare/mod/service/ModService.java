@@ -42,7 +42,7 @@ public class ModService {
      */
     public Mod create(String title, String googleDriveFileId, String zipName, String editingFilePath, User owner) {
         uniqueStringFieldValidator.validate(title, "Наименование",
-                () -> modRepository.existsByTitleAndOwner(title, owner)).throwIfHasErrors();
+                modRepository.findByTitleIgnoreCaseAndOwner(title, owner).isPresent()).throwIfHasErrors();
         return new Mod(title, googleDriveFileId, zipName, editingFilePath, owner)
                 .saveTo(modRepository);
     }
@@ -59,8 +59,8 @@ public class ModService {
                       User executor) {
         Mod mod = modRepository.getOrThrow(id);
         uniqueStringFieldValidator.validate(title, "Наименование",
-                () -> modRepository.existsByTitleAndOwner(title, mod.getOwner())
-                        && modRepository.getByTitleAndOwner(title, mod.getOwner()).getId() != id)
+                !id.equals(modRepository.findByTitleIgnoreCaseAndOwner(title, mod.getOwner()).map(Mod::getId)
+                        .orElse(id)))
                 .throwIfHasErrors();
         return mod.update(title, googleDriveFileId, zipName, editingFilePath, executor)
                 .saveTo(modRepository);

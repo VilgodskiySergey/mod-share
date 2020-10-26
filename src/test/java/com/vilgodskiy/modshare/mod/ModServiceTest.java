@@ -93,6 +93,14 @@ public class ModServiceTest {
     }
 
     @Test
+    void updateWithoutChanges() {
+        Mod mod = createRandomMod();
+        Assertions.assertDoesNotThrow(() ->
+                modService.update(mod.getId(), mod.getTitle(), mod.getGoogleDriveFileId(), mod.getZipName(),
+                        mod.getEditingFilePath(), mod.getOwner()));
+    }
+
+    @Test
     void delete() {
         Mod mod = createRandomMod();
         Assertions.assertDoesNotThrow(() -> modService.delete(mod.getId()));

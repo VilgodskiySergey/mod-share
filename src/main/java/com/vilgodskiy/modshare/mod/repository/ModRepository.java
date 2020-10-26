@@ -6,6 +6,7 @@ import com.vilgodskiy.modshare.util.GetOrThrowRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -21,7 +22,6 @@ public interface ModRepository extends JpaRepository<Mod, UUID>, JpaSpecificatio
         return NOT_FOUND;
     }
 
-    Boolean existsByTitleAndOwner(String title, User owner);
+    Optional<Mod> findByTitleIgnoreCaseAndOwner(String title, User owner);
 
-    Mod getByTitleAndOwner(String title, User owner);
 }

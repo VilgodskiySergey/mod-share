@@ -33,9 +33,9 @@ public class UserService {
                        String login, String password, Role role, User executor) {
         passwordValidator.validate(password).throwIfHasErrors();
         uniqueStringFieldValidator.validate(email, User_.EMAIL,
-                () -> userRepository.existsByEmailIgnoreCase(email)).throwIfHasErrors();
+                userRepository.getByEmailIgnoreCase(email).map(User::getId).isPresent()).throwIfHasErrors();
         uniqueStringFieldValidator.validate(login, "Логин",
-                () -> userRepository.existsByLoginIgnoreCase(login)).throwIfHasErrors();
+                userRepository.getByLoginIgnoreCase(login).map(User::getId).isPresent()).throwIfHasErrors();
         return new User(firstName, lastName, middleName, email, phone,
                 login, passwordEncoder.encode(password), role, executor)
                 .saveTo(userRepository);

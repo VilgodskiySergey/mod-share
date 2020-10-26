@@ -164,6 +164,13 @@ public class UserServiceTest {
     }
 
     @Test
+    void updateWithoutChanges() {
+        User user = createRandomUser();
+        Assertions.assertDoesNotThrow(() -> userService.update(user.getId(), user.getFirstName(),
+                user.getLastName(), user.getMiddleName(), user.getPhone(), getAdmin()));
+    }
+
+    @Test
     void delete() {
         User user = createRandomUser();
         Assertions.assertDoesNotThrow(() -> userService.delete(user.getId()));
