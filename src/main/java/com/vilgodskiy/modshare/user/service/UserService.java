@@ -8,6 +8,7 @@ import com.vilgodskiy.modshare.util.UniqueStringFieldValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -44,10 +45,10 @@ public class UserService {
     /**
      * Update user
      */
+    @Transactional
     public User update(UUID id, String firstName, String lastName, String middleName, String phone, User executor) {
         return userRepository.getOrThrow(id)
-                .update(firstName, lastName, middleName, phone, executor)
-                .saveTo(userRepository);
+                .update(firstName, lastName, middleName, phone, executor);
     }
 
     /**

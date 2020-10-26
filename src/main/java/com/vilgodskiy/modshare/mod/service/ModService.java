@@ -11,6 +11,7 @@ import com.vilgodskiy.modshare.util.UniqueStringFieldValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -55,6 +56,7 @@ public class ModService {
      * @param executor - who updated
      * @return - updated mod
      */
+    @Transactional
     public Mod update(UUID id, String title, String googleDriveFileId, String zipName, String editingFilePath,
                       User executor) {
         Mod mod = modRepository.getOrThrow(id);
@@ -62,8 +64,7 @@ public class ModService {
                 !id.equals(modRepository.findByTitleIgnoreCaseAndOwner(title, mod.getOwner()).map(Mod::getId)
                         .orElse(id)))
                 .throwIfHasErrors();
-        return mod.update(title, googleDriveFileId, zipName, editingFilePath, executor)
-                .saveTo(modRepository);
+        return mod.update(title, googleDriveFileId, zipName, editingFilePath, executor);
     }
 
     /**

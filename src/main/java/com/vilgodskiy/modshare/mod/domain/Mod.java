@@ -12,6 +12,7 @@ import com.vilgodskiy.modshare.util.Validable;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.util.UUID;

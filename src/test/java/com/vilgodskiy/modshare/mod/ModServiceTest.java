@@ -84,8 +84,9 @@ public class ModServiceTest {
         String googleDriveFileId = randomString();
         String zipName = randomString(Mod.ZIP_NAME_LENGTH);
         String editingFilePath = randomString();
-        Mod updatedMod = Assertions.assertDoesNotThrow(() ->
+        Assertions.assertDoesNotThrow(() ->
                 modService.update(mod.getId(), title, googleDriveFileId, zipName, editingFilePath, mod.getOwner()));
+        Mod updatedMod = modRepository.getOrThrow(mod.getId());
         Assertions.assertEquals(title, updatedMod.getTitle());
         Assertions.assertEquals(googleDriveFileId, mod.getGoogleDriveFileId());
         Assertions.assertEquals(zipName, mod.getZipName());
