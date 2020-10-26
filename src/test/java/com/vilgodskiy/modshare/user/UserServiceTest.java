@@ -151,16 +151,18 @@ public class UserServiceTest {
 
     @Test
     void update() {
+        User user = createRandomUser();
         String firstName = randomString(User.FIRST_NAME_LENGTH);
         String lastName = randomString(User.LAST_NAME_LENGTH);
         String middleName = randomString(User.MIDDLE_NAME_LENGTH);
         String phone = randomString(User.PHONE_MAX_LENGTH, false, true);
-        User user = Assertions.assertDoesNotThrow(() -> userService.update(createRandomUser().getId(), firstName,
+        Assertions.assertDoesNotThrow(() -> userService.update(user.getId(), firstName,
                 lastName, middleName, phone, getAdmin()));
-        Assertions.assertEquals(firstName, user.getFirstName());
-        Assertions.assertEquals(lastName, user.getLastName());
-        Assertions.assertEquals(middleName, user.getMiddleName());
-        Assertions.assertEquals(phone, user.getPhone());
+        User updatedUser = userRepository.getOrThrow(user.getId());
+        Assertions.assertEquals(firstName, updatedUser.getFirstName());
+        Assertions.assertEquals(lastName, updatedUser.getLastName());
+        Assertions.assertEquals(middleName, updatedUser.getMiddleName());
+        Assertions.assertEquals(phone, updatedUser.getPhone());
     }
 
     @Test
