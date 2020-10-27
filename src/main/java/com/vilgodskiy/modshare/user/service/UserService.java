@@ -4,7 +4,7 @@ import com.vilgodskiy.modshare.user.domain.Role;
 import com.vilgodskiy.modshare.user.domain.User;
 import com.vilgodskiy.modshare.user.domain.User_;
 import com.vilgodskiy.modshare.user.repository.UserRepository;
-import com.vilgodskiy.modshare.util.UniqueStringFieldValidator;
+import com.vilgodskiy.modshare.util.UniqueFieldValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,8 +23,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordValidator passwordValidator;
-    private final UniqueStringFieldValidator uniqueStringFieldValidator =
-            new UniqueStringFieldValidator(User.ENTITY_NAME);
+    private final UniqueFieldValidator uniqueFieldValidator = new UniqueFieldValidator(User.ENTITY_NAME);
     private final PasswordEncoder passwordEncoder;
 
     /**
@@ -33,9 +32,9 @@ public class UserService {
     public User create(String firstName, String lastName, String middleName, String email, String phone,
                        String login, String password, Role role, User executor) {
         passwordValidator.validate(password).throwIfHasErrors();
-        uniqueStringFieldValidator.validate(email, User_.EMAIL,
+        uniqueFieldValidator.validate(email, User_.EMAIL,
                 userRepository.getByEmailIgnoreCase(email).map(User::getId).isPresent()).throwIfHasErrors();
-        uniqueStringFieldValidator.validate(login, "Логин",
+        uniqueFieldValidator.validate(login, "Логин",
                 userRepository.getByLoginIgnoreCase(login).map(User::getId).isPresent()).throwIfHasErrors();
         return new User(firstName, lastName, middleName, email, phone,
                 login, passwordEncoder.encode(password), role, executor)

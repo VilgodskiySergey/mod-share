@@ -7,7 +7,7 @@ import com.vilgodskiy.modshare.mod.repository.ModRepository;
 import com.vilgodskiy.modshare.share.service.HidingService;
 import com.vilgodskiy.modshare.storage.StorageService;
 import com.vilgodskiy.modshare.user.domain.User;
-import com.vilgodskiy.modshare.util.UniqueStringFieldValidator;
+import com.vilgodskiy.modshare.util.UniqueFieldValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -31,8 +31,7 @@ public class ModService {
     private final StorageService storageService;
     private final HidingService hidingService;
 
-    private final UniqueStringFieldValidator uniqueStringFieldValidator =
-            new UniqueStringFieldValidator(Mod.ENTITY_NAME);
+    private final UniqueFieldValidator uniqueFieldValidator = new UniqueFieldValidator(Mod.ENTITY_NAME);
 
     /**
      * Create mod
@@ -42,7 +41,7 @@ public class ModService {
      * @return - created mod
      */
     public Mod create(String title, String googleDriveFileId, String zipName, String editingFilePath, User owner) {
-        uniqueStringFieldValidator.validate(title, "Наименование",
+        uniqueFieldValidator.validate(title, "Наименование",
                 modRepository.findByTitleIgnoreCaseAndOwner(title, owner).isPresent()).throwIfHasErrors();
         return new Mod(title, googleDriveFileId, zipName, editingFilePath, owner)
                 .saveTo(modRepository);
@@ -60,7 +59,7 @@ public class ModService {
     public Mod update(UUID id, String title, String googleDriveFileId, String zipName, String editingFilePath,
                       User executor) {
         Mod mod = modRepository.getOrThrow(id);
-        uniqueStringFieldValidator.validate(title, "Наименование",
+        uniqueFieldValidator.validate(title, "Наименование",
                 !id.equals(modRepository.findByTitleIgnoreCaseAndOwner(title, mod.getOwner()).map(Mod::getId)
                         .orElse(id)))
                 .throwIfHasErrors();

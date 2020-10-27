@@ -7,9 +7,9 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * @author Vilgodskiy Sergey
  */
-public class UniqueStringFieldValidator {
+public class UniqueFieldValidator {
 
-    public UniqueStringFieldValidator(String entityName) {
+    public UniqueFieldValidator(String entityName) {
         this.entityName = entityName;
     }
 
