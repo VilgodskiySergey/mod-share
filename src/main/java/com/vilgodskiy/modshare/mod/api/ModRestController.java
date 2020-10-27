@@ -37,7 +37,7 @@ public class ModRestController {
     private final ModRepository modRepository;
     private final ModModifyAccessChecker modModifyAccessChecker;
 
-    @GetMapping("/filter")
+    @GetMapping
     @PreAuthorize("isAuthenticated()")
     @ApiOperation("Атрибутивный поиск в списке объектов")
     public ResponseEntity<Page<ModResponse>> filter(
