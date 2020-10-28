@@ -87,9 +87,9 @@ public class SwaggerLoginOperationsConfig extends ApiListingScanner {
                 Collections.emptyList()).updateModelRef(input -> new ModelRef("string")));
 
         Map<String, Model> loginFormModel = new HashMap<>();
-        loginFormModel.put("LoginFormDto",
-                new Model("LoginFormDto",
-                        "LoginFormDto",
+        loginFormModel.put("LoginForm",
+                new Model("LoginForm",
+                        "LoginForm",
                         typeResolver.resolve(LoginForm.class),
                         "com.vilgodskiy.modshare.application.config.security.domain.LoginForm",
                         properties,
