@@ -39,6 +39,10 @@ public class ServiceUtil {
         return RandomStringUtils.random(length, startSymbol, endSymbol);
     }
 
+    public static boolean randomBoolean() {
+        return Math.random() < 0.5;
+    }
+
     @Autowired
     public void setUserService(UserService userService) {
         ServiceUtil.userService = userService;

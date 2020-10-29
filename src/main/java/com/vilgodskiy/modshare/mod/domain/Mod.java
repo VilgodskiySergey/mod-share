@@ -12,7 +12,6 @@ import com.vilgodskiy.modshare.util.Validable;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -36,6 +35,7 @@ public class Mod implements Validable<Mod>, Savable<Mod> {
     public static final String ZIP_NAME_FIELD = "Имя zip-архива";
     public static final String EDITING_FILE_PATH_FIELD = "Путь до редактируемого файла в архиве";
     public static final String OWNER = "Владелец мода";
+    public static final String FREE = "Бесплатная";
 
     /**
      * ID
@@ -77,6 +77,12 @@ public class Mod implements Validable<Mod>, Savable<Mod> {
     private Integer rating;
 
     /**
+     * Free
+     */
+    @Column(name = "b_free", nullable = false)
+    private boolean free;
+
+    /**
      * Owner (MOD_DEVELOPER)
      */
     @ManyToOne
@@ -89,12 +95,13 @@ public class Mod implements Validable<Mod>, Savable<Mod> {
     @Embedded
     private TracingInfo tracingInfo;
 
-    public Mod(String title, String googleDriveFileId, String zipName, String editingFilePath, User owner) {
+    public Mod(String title, String googleDriveFileId, String zipName, String editingFilePath, boolean free, User owner) {
         this.title = title;
         this.owner = owner;
         this.googleDriveFileId = googleDriveFileId;
         this.zipName = zipName;
         this.editingFilePath = editingFilePath;
+        this.free = free;
         this.tracingInfo = new TracingInfo(owner);
         Validators.TITLE
                 .then(Validators.GOOGLE_DRIVE_FILE_ID)
@@ -109,14 +116,17 @@ public class Mod implements Validable<Mod>, Savable<Mod> {
      * Update mod
      *
      * @param title    - new title
+     * @param free - is it free?
      * @param executor - who updated
      * @return - himself (chain-request)
      */
-    public Mod update(String title, String googleDriveFileId, String zipName, String editingFilePath, User executor) {
+    public Mod update(String title, String googleDriveFileId, String zipName, String editingFilePath, boolean free,
+                      User executor) {
         this.title = title;
         this.googleDriveFileId = googleDriveFileId;
         this.zipName = zipName;
         this.editingFilePath = editingFilePath;
+        this.free = free;
         this.tracingInfo.modified(executor);
         Validators.TITLE
                 .then(Validators.GOOGLE_DRIVE_FILE_ID)

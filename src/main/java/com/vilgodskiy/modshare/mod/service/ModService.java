@@ -40,10 +40,11 @@ public class ModService {
      * @param owner - who creator
      * @return - created mod
      */
-    public Mod create(String title, String googleDriveFileId, String zipName, String editingFilePath, User owner) {
+    public Mod create(String title, String googleDriveFileId, String zipName, String editingFilePath, boolean free,
+                      User owner) {
         uniqueFieldValidator.validate(title, "Наименование",
                 modRepository.findByTitleIgnoreCaseAndOwner(title, owner).isPresent()).throwIfHasErrors();
-        return new Mod(title, googleDriveFileId, zipName, editingFilePath, owner)
+        return new Mod(title, googleDriveFileId, zipName, editingFilePath, free, owner)
                 .saveTo(modRepository);
     }
 
@@ -57,13 +58,13 @@ public class ModService {
      */
     @Transactional
     public Mod update(UUID id, String title, String googleDriveFileId, String zipName, String editingFilePath,
-                      User executor) {
+                      boolean free, User executor) {
         Mod mod = modRepository.getOrThrow(id);
         uniqueFieldValidator.validate(title, "Наименование",
                 !id.equals(modRepository.findByTitleIgnoreCaseAndOwner(title, mod.getOwner()).map(Mod::getId)
                         .orElse(id)))
                 .throwIfHasErrors();
-        return mod.update(title, googleDriveFileId, zipName, editingFilePath, executor);
+        return mod.update(title, googleDriveFileId, zipName, editingFilePath, free, executor);
     }
 
     /**

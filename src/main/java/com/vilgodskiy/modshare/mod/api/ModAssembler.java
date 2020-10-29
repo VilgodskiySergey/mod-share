@@ -19,6 +19,7 @@ public class ModAssembler {
                 .setId(mod.getId())
                 .setTitle(mod.getTitle())
                 .setRating(mod.getRating())
+                .setFree(mod.isFree())
                 .setOwner(userAssembler.assemble(mod.getOwner()));
     }
 }

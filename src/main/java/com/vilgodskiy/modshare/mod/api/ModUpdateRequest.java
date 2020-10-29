@@ -25,4 +25,7 @@ public class ModUpdateRequest {
 
     @ApiModelProperty(value = Mod.EDITING_FILE_PATH_FIELD, required = true)
     private String editingFilePath;
+
+    @ApiModelProperty(value = Mod.FREE, required = true)
+    private boolean free = false;
 }

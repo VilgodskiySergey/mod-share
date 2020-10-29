@@ -31,6 +31,9 @@ public class ModResponse {
     @ApiModelProperty(value = "Рейтинг")
     private Integer rating;
 
+    @ApiModelProperty(value = Mod.FREE)
+    private boolean free;
+
     @ApiModelProperty(value = Mod.GOOGLE_DIVE_FILE_ID_FIELD)
     private String googleDriveFileId;
 
