@@ -29,6 +29,10 @@ jwt:
     publicKey: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAOdB67y3kklIIL6LzrmWblsNe8OUpseGhSgiDwGl7BnSkKFH+wGcRcvL3EHduGVImjXNPAPhLdOJhwL5J3hJeisCAwEAAQ==
     privateKey: MIIBVAIBADANBgkqhkiG9w0BAQEFAASCAT4wggE6AgEAAkEA50HrvLeSSUggvovOuZZuWw17w5Smx4aFKCIPAaXsGdKQoUf7AZxFy8vcQd24ZUiaNc08A+Et04mHAvkneEl6KwIDAQABAkEAkV3SvXH3NrFsQ9rGO8rf28SCA9Mxc0KP+UZPgI23+BI+dCl8Ufchsx5JMXTv34oIMzQvbMQ38aNVV9np1KebQQIhAPk3XEsxuZaTRNHN3NclqVawvTaBs9WWH/0BXJnVeve5AiEA7Y1qoJplqCwfwkuly95lOYtmDzJdPUI9LRJk/OdgqwMCICadwGxaYSKG4VQNLRodWNb4/eizQlVnNL+0dU/U93/pAiBalcWmTpobQhAuSCiGEF1rTyPxAZSaiorHiC8oXZb4PwIgIt2CYbu3F0zC6sLTm1tCWuxsTFVaknD/v4AO8niMtd0=
     accessTokenExpiresIn: 172800000
+server:
+    port: 8080
+    servlet:
+        context-path: /webapp
 ---
 
 spring:
