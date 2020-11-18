@@ -36,13 +36,15 @@ public class ModServiceTest {
         String zipName = randomString(Mod.ZIP_NAME_LENGTH);
         String editingFilePath = randomString();
         User owner = createUser(randomString(), Role.MOD_DEVELOPER);
+        boolean free = randomBoolean();
         Mod mod = Assertions.assertDoesNotThrow(() ->
-                modService.create(title, googleDriveFileId, zipName, editingFilePath, owner));
+                modService.create(title, googleDriveFileId, zipName, editingFilePath, free, owner));
         Assertions.assertEquals(title, mod.getTitle());
         Assertions.assertEquals(googleDriveFileId, mod.getGoogleDriveFileId());
         Assertions.assertEquals(zipName, mod.getZipName());
         Assertions.assertEquals(editingFilePath, mod.getEditingFilePath());
         Assertions.assertEquals(owner.getId(), mod.getOwner().getId());
+        Assertions.assertEquals(free, mod.isFree());
         Assertions.assertNotNull(mod.getId());
         Assertions.assertNotNull(mod.getTracingInfo());
         Assertions.assertNull(mod.getRating());
@@ -84,13 +86,15 @@ public class ModServiceTest {
         String googleDriveFileId = randomString();
         String zipName = randomString(Mod.ZIP_NAME_LENGTH);
         String editingFilePath = randomString();
+        boolean free = !mod.isFree();
         Assertions.assertDoesNotThrow(() ->
-                modService.update(mod.getId(), title, googleDriveFileId, zipName, editingFilePath, mod.getOwner()));
+                modService.update(mod.getId(), title, googleDriveFileId, zipName, editingFilePath, free, mod.getOwner()));
         Mod updatedMod = modRepository.getOrThrow(mod.getId());
         Assertions.assertEquals(title, updatedMod.getTitle());
         Assertions.assertEquals(googleDriveFileId, mod.getGoogleDriveFileId());
         Assertions.assertEquals(zipName, mod.getZipName());
         Assertions.assertEquals(editingFilePath, mod.getEditingFilePath());
+        Assertions.assertEquals(free, mod.isFree());
     }
 
     @Test
@@ -98,7 +102,7 @@ public class ModServiceTest {
         Mod mod = createRandomMod();
         Assertions.assertDoesNotThrow(() ->
                 modService.update(mod.getId(), mod.getTitle(), mod.getGoogleDriveFileId(), mod.getZipName(),
-                        mod.getEditingFilePath(), mod.getOwner()));
+                        mod.getEditingFilePath(), mod.isFree(), mod.getOwner()));
     }
 
     @Test
@@ -117,7 +121,8 @@ public class ModServiceTest {
     }
 
     public static Mod createMod(String title, User owner) {
-        return modService.create(title, randomString(), randomString(Mod.ZIP_NAME_LENGTH), randomString(), owner);
+        return modService.create(title, randomString(), randomString(Mod.ZIP_NAME_LENGTH), randomString(),
+                randomBoolean(), owner);
     }
 
 }

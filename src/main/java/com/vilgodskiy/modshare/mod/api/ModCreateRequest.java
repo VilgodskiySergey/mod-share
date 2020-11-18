@@ -6,8 +6,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-
 /**
  * @author Vilgodskiy Sergey 14.08.2020
  */
@@ -27,4 +25,7 @@ public class ModCreateRequest {
 
     @ApiModelProperty(value = Mod.EDITING_FILE_PATH_FIELD, required = true)
     private String editingFilePath;
+
+    @ApiModelProperty(value = Mod.FREE, required = true)
+    private boolean free = false;
 }

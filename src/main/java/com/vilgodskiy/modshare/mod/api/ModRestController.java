@@ -61,7 +61,7 @@ public class ModRestController {
             @ApiParam("Новый объект") @RequestBody ModCreateRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(modAssembler.assemble(
                 modService.create(request.getTitle(), request.getGoogleDriveFileId(), request.getZipName(),
-                        request.getEditingFilePath(), ActiveUserHolder.getActiveUser())));
+                        request.getEditingFilePath(), request.isFree(), ActiveUserHolder.getActiveUser())));
     }
 
     @PutMapping("/{id}")
@@ -73,7 +73,7 @@ public class ModRestController {
         modModifyAccessChecker.checkAccessOrThrow(ActiveUserHolder.getActiveUser(), id);
         return ResponseEntity.ok(modAssembler.assemble(
                 modService.update(id, request.getTitle(), request.getGoogleDriveFileId(), request.getZipName(),
-                        request.getEditingFilePath(), ActiveUserHolder.getActiveUser())));
+                        request.getEditingFilePath(), request.isFree(), ActiveUserHolder.getActiveUser())));
     }
 
     @DeleteMapping("/{id}")
