@@ -62,7 +62,7 @@ public class SwaggerLoginOperationsConfig extends ApiListingScanner {
                                                 .description("credentionals for login")
                                                 .type(typeResolver.resolve(String.class))
                                                 .required(true)
-                                                .modelRef(new ModelRef("LoginFormDto"))
+                                                .modelRef(new ModelRef("LoginForm"))
                                                 .build()))
                         .responseMessages(newHashSet(new ResponseMessageBuilder()
                                 .code(200)
@@ -87,11 +87,11 @@ public class SwaggerLoginOperationsConfig extends ApiListingScanner {
                 Collections.emptyList()).updateModelRef(input -> new ModelRef("string")));
 
         Map<String, Model> loginFormModel = new HashMap<>();
-        loginFormModel.put("LoginFormDto",
-                new Model("LoginFormDto",
-                        "LoginFormDto",
+        loginFormModel.put("LoginForm",
+                new Model("LoginForm",
+                        "LoginForm",
                         typeResolver.resolve(LoginForm.class),
-                        "ru.rtlabs.r2.webapp._config.security.LoginFormDto",
+                        "com.vilgodskiy.modshare.application.config.security.domain.LoginForm",
                         properties,
                         "login form dto",
                         "",

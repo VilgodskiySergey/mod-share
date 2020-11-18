@@ -43,7 +43,7 @@ public class SwaggerConfig {
                 .pathProvider(new RelativePathProvider(servletContext) {
                     @Override
                     public String getApplicationBasePath() {
-                        return profile.equals("dev") | profile.equals("test") ? "/webapp" : "";
+                        return "/webapp";
                     }
                 })
                 .select()
