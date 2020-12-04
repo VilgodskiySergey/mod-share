@@ -26,7 +26,6 @@ public class AuthLogoutHandler implements LogoutHandler {
 
     private final JwtTokenService jwtTokenService;
     private final TokenService tokenService;
-    private final UserRepository userRepository;
 
     @Override
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
@@ -44,6 +43,5 @@ public class AuthLogoutHandler implements LogoutHandler {
         if (!tokenService.deleteBySessionId(accessToken.getSessionId())) {
             throw new AuthExecutionConflictException("Сессия этого токена не зарегистрирована в системе");
         }
-        User user = userRepository.getOrThrow(accessToken.getAccountId());
     }
 }

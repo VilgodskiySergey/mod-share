@@ -34,9 +34,6 @@ import java.util.List;
 @EnableSwagger2
 public class SwaggerConfig {
 
-    @Value("${spring.profiles:\"\"}")
-    private String profile;
-
     @Bean
     public Docket api(ServletContext servletContext) {
         return new Docket(DocumentationType.SWAGGER_2)
